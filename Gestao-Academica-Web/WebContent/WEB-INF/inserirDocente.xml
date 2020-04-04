@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                            http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<var name="docenteModel"
+		class="br.com.devmedia.gestaoacademicaweb.model.Docente" />
+
+	<view-state id="form"
+		view="/WEB-INF/views/inserir_docente_form.jsp" model="docenteModel">
+		<transition on="inserir" to="inserirDocenteAction" />
+		<transition on="cancelar" to="cancelado" />
+	</view-state>
+
+	<action-state id="inserirDocenteAction">
+		<evaluate
+			expression="docenteController.adicionarDocente(docenteModel)" />
+		<transition to="listar" />
+	</action-state>
+
+	<view-state id="listar"
+		view="/WEB-INF/views/listar_docentes.jsp">
+		<on-render>
+			<evaluate expression="docenteController.listarDocentes()"
+				result="viewScope.docenteList" />
+		</on-render>
+		<transition on="novo" to="form" />
+		<transition on="excluir" to="listar">
+			<set name="requestScope.docenteId"
+				value="requestParameters.docenteId" type="long" />
+			<evaluate
+				expression="docenteController.removerDocente(docenteId)" />
+		</transition>
+	</view-state>
+
+	<end-state id="cancelado" view="/WEB-INF/views/cancelado.jsp" />
+
+</flow>
