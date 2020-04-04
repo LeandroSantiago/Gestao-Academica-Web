@@ -27,6 +27,7 @@ public class DocenteDAOImpl implements DocenteDAO {
 
 	}
 
+	//Teste
 	@SuppressWarnings("unchecked")
 	public List<Docente> listarDocentes() {
 		return sessionFactory.getCurrentSession().createQuery("from Docente").list();
